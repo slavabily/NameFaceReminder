@@ -9,8 +9,25 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var image: Image?
+    @State private var pickedImage: UIImage?
+    @State private var showingImagePicker = false
+    
     var body: some View {
-        Text("Hello, World!")
+        NavigationView {
+            List {
+                Text("Hello, World!")
+            }
+            .navigationBarTitle("NameFaceReminder")
+            .navigationBarItems(trailing: Button(action: {
+                self.showingImagePicker = true
+            }, label: {
+                Image(systemName: "plus")
+            }))
+            .sheet(isPresented: $showingImagePicker) {
+                ImagePicker(image: self.$pickedImage)
+            }
+        }
     }
 }
 
