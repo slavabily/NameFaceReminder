@@ -10,11 +10,10 @@ import Foundation
 
 struct Face: Codable, Identifiable, Comparable {
     var id: UUID
-    var name: String
-    var image: Data
+    var imageName: String
     
     static func < (lhs: Face, rhs: Face) -> Bool {
-        lhs.name < rhs.name
+        lhs.imageName < rhs.imageName
     }
     
      
