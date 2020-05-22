@@ -9,7 +9,7 @@
 import Foundation
 
 struct Face: Codable, Identifiable, Comparable {
-    var id: UUID
+    var id = UUID()
     var imageName: String
     
     static func < (lhs: Face, rhs: Face) -> Bool {

@@ -18,18 +18,7 @@ struct NamingView: View {
         Form {
             Section(header: Text("Please, enter photo's name")) {
                 TextField("Name", text: $photoName) {
-                    if self.pickedImage != nil {
-                        self.record(image: self.pickedImage!, fileName: self.photoName)
-                        self.photoNameUUID = UUID(uuidString: self.photoName)
-                        if self.photoNameUUID != nil {
-                            self.save(model: Face(id: self.photoNameUUID!, imageName: self.photoName), fileName: "model")
-                        } else {
-                            print("UUID is not generated!")
-                        }
-                    } else {
-                        // alert of unseccessful image selection and then to dismiss the view
-                    }
-                    
+                     
                 }
             }
         }
@@ -54,18 +43,6 @@ struct NamingView: View {
         }
     }
     
-    func save(model: Face, fileName: String) {
-        let url = getDocumentsDirectory().appendingPathComponent(fileName)
-        let encoder = JSONEncoder()
-        if let modelData = try? encoder.encode(model) {
-            do {
-                try modelData.write(to: url, options: [.atomicWrite, .completeFileProtection])
-                print("Model data is saved")
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-    }
 }
 
 struct NamingView_Previews: PreviewProvider {

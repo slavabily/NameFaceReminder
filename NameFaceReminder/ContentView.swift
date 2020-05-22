@@ -9,7 +9,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var image: Image?
+    @ObservedObject var faces = Faces()
+    
     @State private var pickedImage: UIImage?
     @State private var showingImagePicker = false
     @State private var showingNamingView = false
@@ -17,11 +18,17 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                NavigationLink(destination: NamingView(pickedImage: $pickedImage), isActive: $showingNamingView) {
-                    EmptyView()
+                NavigationLink(destination: NamingView(pickedImage: self.$pickedImage), isActive: self.$showingNamingView)  {
+                    ForEach(faces.items) { item in
+                        NavigationLink(destination: NamingView(pickedImage: self.$pickedImage)) {
+                            Text(item.imageName)
+                        }
+                    }
                 }
                 
-            }
+                
+                
+             }
             .navigationBarTitle("NameFaceReminder")
             .navigationBarItems(trailing: Button(action: {
                 self.showingImagePicker = true
