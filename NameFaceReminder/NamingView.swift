@@ -9,25 +9,45 @@
 import SwiftUI
 
 struct NamingView: View {
+    @Binding var faces: Faces
     @Environment(\.presentationMode) var presentationMode
     @Binding var pickedImage: UIImage?
     @State private var photoName = ""
-    @State private var photoNameUUID: UUID?
- 
+
     var body: some View {
         Form {
             Section(header: Text("Please, enter photo's name")) {
-                TextField("Name", text: $photoName) {
-                     
-                }
+                TextField("Name", text: $photoName)
             }
         }
         .navigationBarTitle("Naming and Saving", displayMode: .inline)
+        .navigationBarItems(trailing: Button("Save") {
+            self.record(image: self.pickedImage ?? UIImage(), fileName: self.photoName)
+            
+            if self.photoName != "" {
+                let item = Face(imageName: self.photoName)
+                self.faces.items.append(item)
+                self.saveData()
+                self.presentationMode.wrappedValue.dismiss()
+            } else {
+                print("Problem with saving items...")
+            }
+        })
     }
     
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
+    }
+    
+    func saveData() {
+        do {
+            let fileName = getDocumentsDirectory().appendingPathComponent("Saved")
+            let data = try JSONEncoder().encode(self.faces)
+            try data.write(to: fileName, options: [.atomic, .completeFileProtection])
+         } catch {
+            print("Unable to save data")
+        }
     }
     
     func record(image: UIImage, fileName: String) {
@@ -42,14 +62,13 @@ struct NamingView: View {
             }
         }
     }
-    
 }
 
-struct NamingView_Previews: PreviewProvider {
-    @State static var pickedImage: UIImage?
-    static var previews: some View {
-        NamingView(pickedImage: $pickedImage)
-    }
-}
+//struct NamingView_Previews: PreviewProvider {
+//    @State static var pickedImage: UIImage?
+//    static var previews: some View {
+//        NamingView(pickedImage: $pickedImage)
+//    }
+//}
 
  

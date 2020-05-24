@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var faces = Faces()
+    @State private var faces = Faces()
     
     @State private var pickedImage: UIImage?
     @State private var showingImagePicker = false
@@ -17,27 +17,44 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                NavigationLink(destination: NamingView(pickedImage: self.$pickedImage), isActive: self.$showingNamingView)  {
+            VStack {
+                NavigationLink("", destination: NamingView(faces: $faces, pickedImage: $pickedImage), isActive: $showingNamingView)
+                List {
                     ForEach(faces.items) { item in
-                        NavigationLink(destination: NamingView(pickedImage: self.$pickedImage)) {
+                        NavigationLink(destination: NamingView(faces: self.$faces, pickedImage: self.$pickedImage)) {
                             Text(item.imageName)
                         }
                     }
+                    
                 }
-                
-                
-                
-             }
-            .navigationBarTitle("NameFaceReminder")
-            .navigationBarItems(trailing: Button(action: {
-                self.showingImagePicker = true
-            }, label: {
-                Image(systemName: "plus")
-            }))
-            .sheet(isPresented: $showingImagePicker, onDismiss: nameTheImage) {
-                ImagePicker(image: self.$pickedImage)
+                .navigationBarTitle("NameFaceReminder")
+                .navigationBarItems(trailing: Button(action: {
+                    self.showingImagePicker = true
+                }, label: {
+                    Image(systemName: "plus")
+                }))
+                .sheet(isPresented: $showingImagePicker, onDismiss: nameTheImage) {
+                    ImagePicker(image: self.$pickedImage)
+                }
             }
+            .onAppear(perform: loadData)
+            
+        }
+    }
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+    
+    func loadData() {
+        let fileName = getDocumentsDirectory().appendingPathComponent("Saved")
+        
+        do {
+            let data = try Data(contentsOf: fileName)
+            faces = try JSONDecoder().decode(Faces.self, from: data)
+        } catch {
+            print("Unable to load saved data.")
         }
     }
     
@@ -45,10 +62,9 @@ struct ContentView: View {
         guard pickedImage != nil else { return }
         print("Image selected")
         self.showingNamingView = true
-        
-     }
-}
-
+    }
+ }
+    
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
