@@ -64,11 +64,13 @@ struct NamingView: View {
     }
 }
 
-//struct NamingView_Previews: PreviewProvider {
-//    @State static var pickedImage: UIImage?
-//    static var previews: some View {
-//        NamingView(pickedImage: $pickedImage)
-//    }
-//}
+struct NamingView_Previews: PreviewProvider {
+    @State static var pickedImage: UIImage?
+    @State static var faces = Faces()
+    
+    static var previews: some View {
+        NamingView(faces: $faces, pickedImage: $pickedImage)
+    }
+}
 
  
