@@ -9,15 +9,20 @@
 import SwiftUI
 
 struct NamingView: View {
-    @Binding var faces: Faces
+    var faces: Faces
+    var pickedImage: UIImage?
     @Environment(\.presentationMode) var presentationMode
-    @Binding var pickedImage: UIImage?
     @State private var photoName = ""
 
     var body: some View {
-        Form {
-            Section(header: Text("Please, enter photo's name")) {
-                TextField("Name", text: $photoName)
+        VStack {
+            Form {
+                Section(header: Text("Please, enter photo's name")) {
+                    TextField("Name", text: $photoName)
+                }
+                Image(uiImage: pickedImage ?? UIImage())
+                .resizable()
+                .scaledToFit()
             }
         }
         .navigationBarTitle("Naming and Saving", displayMode: .inline)
@@ -69,7 +74,7 @@ struct NamingView_Previews: PreviewProvider {
     @State static var faces = Faces()
     
     static var previews: some View {
-        NamingView(faces: $faces, pickedImage: $pickedImage)
+        NamingView(faces: faces, pickedImage: pickedImage)
     }
 }
 

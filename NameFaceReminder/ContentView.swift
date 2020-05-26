@@ -18,24 +18,21 @@ struct ContentView: View {
     var body: some View {
          NavigationView {
             VStack {
-                NavigationLink("", destination: NamingView(faces: $faces, pickedImage: $pickedImage), isActive: $showingNamingView)
+                NavigationLink("", destination: NamingView(faces: faces, pickedImage: pickedImage), isActive: $showingNamingView)
                 List {
                     ForEach(faces.items.sorted()) { item in
-                        NavigationLink(destination: NamingView(faces: self.$faces, pickedImage: self.$pickedImage)) {
+                        NavigationLink(destination: NamingView(faces: self.faces, pickedImage: self.pickedImage)) {
                             if self.images.isEmpty == false {
                                 self.images[self.faces.items.firstIndex(of: item)!]
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 50, height: 50)
                             }
-                            
                             Text(item.imageName)
                                 .onAppear() {
                                     self.loadImages()
                             }
-                            
                         }
-                    
                     }
                 }
                 .navigationBarTitle("NameFaceReminder")
