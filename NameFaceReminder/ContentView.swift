@@ -21,7 +21,7 @@ struct ContentView: View {
                 NavigationLink("", destination: NamingView(faces: faces, pickedImage: pickedImage), isActive: $showingNamingView)
                 List {
                     ForEach(faces.items.sorted()) { item in
-                        NavigationLink(destination: NamingView(faces: self.faces, pickedImage: self.pickedImage)) {
+                        NavigationLink(destination: DetailView(faces: self.faces, item: item, images: self.images)) {
                             if self.images.isEmpty == false {
                                 self.images[self.faces.items.firstIndex(of: item)!]
                                     .resizable()

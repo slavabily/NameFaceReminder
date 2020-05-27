@@ -17,6 +17,7 @@
 		B9136A822471A70500F10EFF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9136A802471A70500F10EFF /* LaunchScreen.storyboard */; };
 		B94B53A82476BABF005E038E /* Faces.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94B53A72476BABF005E038E /* Faces.swift */; };
 		B97315D1247515B80045F46F /* NamingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97315D0247515B80045F46F /* NamingView.swift */; };
+		B9844A76247E36BF00AFA764 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9844A75247E36BF00AFA764 /* DetailView.swift */; };
 		B9B630702472E4DD007B6D03 /* Face.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B6306F2472E4DD007B6D03 /* Face.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		B9136A832471A70600F10EFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B94B53A72476BABF005E038E /* Faces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Faces.swift; sourceTree = "<group>"; };
 		B97315D0247515B80045F46F /* NamingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamingView.swift; sourceTree = "<group>"; };
+		B9844A75247E36BF00AFA764 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		B9B6306F2472E4DD007B6D03 /* Face.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Face.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -73,6 +75,7 @@
 				B94B53A72476BABF005E038E /* Faces.swift */,
 				B9136A792471A6FD00F10EFF /* ContentView.swift */,
 				B97315D0247515B80045F46F /* NamingView.swift */,
+				B9844A75247E36BF00AFA764 /* DetailView.swift */,
 				B9136A7B2471A70500F10EFF /* Assets.xcassets */,
 				B9136A802471A70500F10EFF /* LaunchScreen.storyboard */,
 				B9136A832471A70600F10EFF /* Info.plist */,
@@ -162,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B94B53A82476BABF005E038E /* Faces.swift in Sources */,
+				B9844A76247E36BF00AFA764 /* DetailView.swift in Sources */,
 				B9136A782471A6FD00F10EFF /* NameFaceReminder.xcdatamodeld in Sources */,
 				B9136A732471A6FD00F10EFF /* AppDelegate.swift in Sources */,
 				B97315D1247515B80045F46F /* NamingView.swift in Sources */,
