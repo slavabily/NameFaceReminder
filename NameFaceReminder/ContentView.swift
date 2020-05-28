@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct ContentView: View {
     @State private var faces = Faces()
@@ -15,13 +16,25 @@ struct ContentView: View {
     @State private var showingImagePicker = false
     @State private var showingNamingView = false
     
+    @State private var centerCoordinate = CLLocationCoordinate2D()
+    @State private var selectedPlace: MKPointAnnotation?
+    @State private var showingPlaceDetails = false
+    @State private var locations = [CodableMKPointAnnotation]()
+    
     var body: some View {
          NavigationView {
             VStack {
-                NavigationLink("", destination: NamingView(faces: faces, pickedImage: pickedImage), isActive: $showingNamingView)
+                NavigationLink("", destination: NamingView(faces: faces, pickedImage: pickedImage, locations: $locations), isActive: $showingNamingView)
                 List {
                     ForEach(faces.items.sorted()) { item in
-                        NavigationLink(destination: DetailView(faces: self.faces, item: item, images: self.images)) {
+                        NavigationLink(destination:
+                        DetailView(faces: self.faces,
+                                   item: item,
+                                   images: self.images,
+                                   centerCoordinate: self.$centerCoordinate,
+                                   selectedPlace: self.$selectedPlace,
+                                   showingPlaceDetails: self.$showingPlaceDetails,
+                                   locations: self.locations)) {
                             if self.images.isEmpty == false {
                                 self.images[self.faces.items.firstIndex(of: item)!]
                                     .resizable()
@@ -73,7 +86,7 @@ struct ContentView: View {
                 if let uiImage = UIImage(data: jpegData) {
                   let image = Image(uiImage: uiImage)
                     images.append(image)
-                    print(images)
+                    loadLocations()
                 } else {
                     print("No UIImages converted")
                 }
@@ -88,8 +101,19 @@ struct ContentView: View {
         print("Image selected")
         self.showingNamingView = true
     }
- }
     
+    func loadLocations() {
+        let fileName = getDocumentsDirectory().appendingPathComponent("SavedPlaces")
+        
+        do {
+            let data = try Data(contentsOf: fileName)
+            locations = try JSONDecoder().decode([CodableMKPointAnnotation].self, from: data)
+        } catch {
+            print("Unable to load saved locations.")
+        }
+    }
+ }
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()

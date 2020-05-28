@@ -13,6 +13,8 @@ struct NamingView: View {
     var pickedImage: UIImage?
     @Environment(\.presentationMode) var presentationMode
     @State private var photoName = ""
+    
+    @Binding var locations: [CodableMKPointAnnotation]
 
     var body: some View {
         VStack {
@@ -50,6 +52,7 @@ struct NamingView: View {
             let fileName = getDocumentsDirectory().appendingPathComponent("Saved")
             let data = try JSONEncoder().encode(self.faces)
             try data.write(to: fileName, options: [.atomic, .completeFileProtection])
+            saveLocations()
          } catch {
             print("Unable to save data")
         }
@@ -67,15 +70,25 @@ struct NamingView: View {
             }
         }
     }
-}
-
-struct NamingView_Previews: PreviewProvider {
-    @State static var pickedImage: UIImage?
-    @State static var faces = Faces()
     
-    static var previews: some View {
-        NamingView(faces: faces, pickedImage: pickedImage)
+    func saveLocations() {
+        do {
+            let fileName = getDocumentsDirectory().appendingPathComponent("SavedPlaces")
+            let data = try JSONEncoder().encode(self.locations)
+            try data.write(to: fileName, options: [.atomic, .completeFileProtection])
+         } catch {
+            print("Unable to save locations")
+        }
     }
 }
+
+//struct NamingView_Previews: PreviewProvider {
+//    @State static var pickedImage: UIImage?
+//    @State static var faces = Faces()
+//    
+//    static var previews: some View {
+//        NamingView(faces: faces, pickedImage: pickedImage)
+//    }
+//}
 
  
