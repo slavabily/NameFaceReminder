@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct NamingView: View {
     var faces: Faces
@@ -14,7 +15,9 @@ struct NamingView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var photoName = ""
     
+    @Binding var selectedPlace: MKPointAnnotation?
     @Binding var locations: [CodableMKPointAnnotation]
+    let locationFetcher = LocationFetcher()
 
     var body: some View {
         VStack {
@@ -34,12 +37,26 @@ struct NamingView: View {
             if self.photoName != "" {
                 let item = Face(imageName: self.photoName)
                 self.faces.items.append(item)
+                // fetching location
+                if let location = self.locationFetcher.lastKnownLocation {
+                    let newLocation = CodableMKPointAnnotation()
+                    newLocation.coordinate = location
+                    self.locations.append(newLocation)
+                    self.selectedPlace = newLocation
+                    
+                    print("Your location is \(location)")
+                } else {
+                    print("Your location is unknown")
+                }
                 self.saveData()
                 self.presentationMode.wrappedValue.dismiss()
             } else {
                 print("Problem with saving items...")
             }
         })
+            .onAppear() {
+                self.locationFetcher.start()
+        }
     }
     
     func getDocumentsDirectory() -> URL {

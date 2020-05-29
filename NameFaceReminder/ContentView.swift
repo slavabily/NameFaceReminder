@@ -24,7 +24,7 @@ struct ContentView: View {
     var body: some View {
          NavigationView {
             VStack {
-                NavigationLink("", destination: NamingView(faces: faces, pickedImage: pickedImage, locations: $locations), isActive: $showingNamingView)
+                NavigationLink("", destination: NamingView(faces: faces, pickedImage: pickedImage, selectedPlace: $selectedPlace, locations: $locations), isActive: $showingNamingView)
                 List {
                     ForEach(faces.items.sorted()) { item in
                         NavigationLink(destination:
