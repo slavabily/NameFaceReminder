@@ -11,20 +11,19 @@ import MapKit
 
 struct ContentView: View {
     @State private var faces = Faces()
+    @State private var face = Face(imageName: "", place: CodableMKPointAnnotation())
     @State private var images = [Image]()
     @State private var pickedImage: UIImage?
     @State private var showingImagePicker = false
     @State private var showingNamingView = false
     
     @State private var centerCoordinate = CLLocationCoordinate2D()
-    @State private var selectedPlace: MKPointAnnotation?
     @State private var showingPlaceDetails = false
-    @State private var locations = [CodableMKPointAnnotation]()
-    
+ 
     var body: some View {
          NavigationView {
             VStack {
-                NavigationLink("", destination: NamingView(faces: faces, pickedImage: pickedImage, selectedPlace: $selectedPlace, locations: $locations), isActive: $showingNamingView)
+                NavigationLink("", destination: NamingView(faces: faces, face: face, pickedImage: pickedImage), isActive: $showingNamingView)
                 List {
                     ForEach(faces.items.sorted()) { item in
                         NavigationLink(destination:
@@ -32,19 +31,14 @@ struct ContentView: View {
                                    item: item,
                                    images: self.images,
                                    centerCoordinate: self.$centerCoordinate,
-                                   selectedPlace: self.$selectedPlace,
-                                   showingPlaceDetails: self.$showingPlaceDetails,
-                                   locations: self.locations)) {
+                                   showingPlaceDetails: self.$showingPlaceDetails)) {
                             if self.images.isEmpty == false {
                                 self.images[self.faces.items.firstIndex(of: item)!]
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 50, height: 50)
                             }
-                            Text(item.imageName)
-                                .onAppear() {
-                                    self.loadImages()
-                            }
+                                    Text("\(item.imageName)")
                         }
                     }
                 }
@@ -57,6 +51,8 @@ struct ContentView: View {
                     .sheet(isPresented: $showingImagePicker, onDismiss: nameTheImage) {
                         ImagePicker(image: self.$pickedImage)
                 }
+                .onAppear(perform: loadImages) 
+                  
             }
             .onAppear(perform: loadData)
         }
@@ -86,7 +82,6 @@ struct ContentView: View {
                 if let uiImage = UIImage(data: jpegData) {
                   let image = Image(uiImage: uiImage)
                     images.append(image)
-                    loadLocations()
                 } else {
                     print("No UIImages converted")
                 }
@@ -101,21 +96,10 @@ struct ContentView: View {
         print("Image selected")
         self.showingNamingView = true
     }
-    
-    func loadLocations() {
-        let fileName = getDocumentsDirectory().appendingPathComponent("SavedPlaces")
-        
-        do {
-            let data = try Data(contentsOf: fileName)
-            locations = try JSONDecoder().decode([CodableMKPointAnnotation].self, from: data)
-        } catch {
-            print("Unable to load saved locations.")
-        }
-    }
  }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}

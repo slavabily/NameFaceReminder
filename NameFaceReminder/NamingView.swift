@@ -11,12 +11,11 @@ import MapKit
 
 struct NamingView: View {
     var faces: Faces
+    @State var face: Face
     var pickedImage: UIImage?
     @Environment(\.presentationMode) var presentationMode
     @State private var photoName = ""
     
-    @Binding var selectedPlace: MKPointAnnotation?
-    @Binding var locations: [CodableMKPointAnnotation]
     let locationFetcher = LocationFetcher()
 
     var body: some View {
@@ -35,20 +34,18 @@ struct NamingView: View {
             self.record(image: self.pickedImage ?? UIImage(), fileName: self.photoName)
             
             if self.photoName != "" {
-                let item = Face(imageName: self.photoName)
-                self.faces.items.append(item)
-                // fetching location
                 if let location = self.locationFetcher.lastKnownLocation {
                     let newLocation = CodableMKPointAnnotation()
                     newLocation.coordinate = location
-                    self.locations.append(newLocation)
-                    self.selectedPlace = newLocation
-                    
+                    self.face.place = newLocation
                     print("Your location is \(location)")
+
+                    let item = Face(imageName: self.photoName, place: self.face.place)
+                    self.faces.items.append(item)
+                    self.saveData()
                 } else {
                     print("Your location is unknown")
                 }
-                self.saveData()
                 self.presentationMode.wrappedValue.dismiss()
             } else {
                 print("Problem with saving items...")
@@ -69,7 +66,6 @@ struct NamingView: View {
             let fileName = getDocumentsDirectory().appendingPathComponent("Saved")
             let data = try JSONEncoder().encode(self.faces)
             try data.write(to: fileName, options: [.atomic, .completeFileProtection])
-            saveLocations()
          } catch {
             print("Unable to save data")
         }
@@ -85,16 +81,6 @@ struct NamingView: View {
             } catch {
                 print(error.localizedDescription)
             }
-        }
-    }
-    
-    func saveLocations() {
-        do {
-            let fileName = getDocumentsDirectory().appendingPathComponent("SavedPlaces")
-            let data = try JSONEncoder().encode(self.locations)
-            try data.write(to: fileName, options: [.atomic, .completeFileProtection])
-         } catch {
-            print("Unable to save locations")
         }
     }
 }

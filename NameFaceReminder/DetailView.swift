@@ -15,18 +15,19 @@ struct DetailView: View {
     var images: [Image]
     
     @Binding var centerCoordinate: CLLocationCoordinate2D
-    @Binding var selectedPlace: MKPointAnnotation?
     @Binding var showingPlaceDetails: Bool
-    var locations: [CodableMKPointAnnotation]
-    
+
     var body: some View {
         VStack {
             if self.images.isEmpty == false {
-                self.images[self.faces.items.firstIndex(of: self.item)!]
+                GeometryReader { (geo) in
+                    self.images[self.faces.items.firstIndex(of: self.item)!]
                     .resizable()
-                    .scaledToFit()
+                    .aspectRatio(contentMode: .fit)
+                        .frame(width: geo.size.width)
+                }
             }
-            MapView(centerCoordinate: $centerCoordinate, selectedPlace: $selectedPlace, showingPlaceDetails: $showingPlaceDetails, annotations: locations)
+            MapView(centerCoordinate: $centerCoordinate, selectedPlace: item.place, showingPlaceDetails: $showingPlaceDetails)
         }
         .navigationBarTitle("\(self.item.imageName)", displayMode: .inline)
     }

@@ -11,10 +11,8 @@ import MapKit
 
 struct MapView: UIViewRepresentable {
     @Binding var centerCoordinate: CLLocationCoordinate2D
-    @Binding var selectedPlace: MKPointAnnotation?
+    var selectedPlace: CodableMKPointAnnotation?
     @Binding var showingPlaceDetails: Bool
-    
-    var annotations: [MKPointAnnotation]
     
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
@@ -23,9 +21,9 @@ struct MapView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
-        if annotations.count != uiView.annotations.count {
+        if selectedPlace != nil {
             uiView.removeAnnotations(uiView.annotations)
-            uiView.addAnnotations(annotations)
+            uiView.addAnnotation(selectedPlace ?? MKPointAnnotation())
         }
     }
     
@@ -63,13 +61,6 @@ struct MapView: UIViewRepresentable {
             // whether it's a new view or a recycled one, send it back
             return annotationView
         }
-        
-        func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-            guard let placeMark = view.annotation as? MKPointAnnotation else { return }
-            
-            parent.selectedPlace = placeMark
-            parent.showingPlaceDetails = true
-        }
     }
 }
 
@@ -84,9 +75,9 @@ extension CodableMKPointAnnotation {
     }
 }
 
-struct MapView_Previews: PreviewProvider {
-    static var previews: some View {
-        MapView(centerCoordinate: .constant(CodableMKPointAnnotation.example.coordinate),selectedPlace: .constant(CodableMKPointAnnotation.example), showingPlaceDetails: .constant(false), annotations: [CodableMKPointAnnotation.example])
-    }
-}
+//struct MapView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MapView(centerCoordinate: .constant(CodableMKPointAnnotation.example.coordinate),selectedPlace: .constant(CodableMKPointAnnotation.example), showingPlaceDetails: .constant(false), annotations: [CodableMKPointAnnotation.example])
+//    }
+//}
 

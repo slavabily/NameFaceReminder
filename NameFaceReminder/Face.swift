@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import MapKit
 
 struct Face: Codable, Identifiable, Comparable {
     var id = UUID()
     var imageName: String
+    var place: CodableMKPointAnnotation
     
     static func < (lhs: Face, rhs: Face) -> Bool {
         lhs.imageName < rhs.imageName
