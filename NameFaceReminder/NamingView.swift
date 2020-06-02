@@ -85,13 +85,14 @@ struct NamingView: View {
     }
 }
 
-//struct NamingView_Previews: PreviewProvider {
-//    @State static var pickedImage: UIImage?
-//    @State static var faces = Faces()
-//    
-//    static var previews: some View {
-//        NamingView(faces: faces, pickedImage: pickedImage)
-//    }
-//}
+struct NamingView_Previews: PreviewProvider {
+    @State static var pickedImage: UIImage?
+    @State static var faces = Faces()
+    @State static var face = Face(imageName: "1", place: CodableMKPointAnnotation())
+    
+    static var previews: some View {
+        NamingView(faces: faces, face: face, pickedImage: pickedImage)
+    }
+}
 
  

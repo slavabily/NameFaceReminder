@@ -50,12 +50,12 @@ struct DetailView: View {
     }
 }
 
-//struct DetailView_Previews: PreviewProvider {
-//    static var faces = Faces()
-//    static var item = Face(imageName: "")
-//    static var images = [Image]()
-//
-//    static var previews: some View {
-//        DetailView(faces: faces, item: item, images: images)
-//    }
-//}
+struct DetailView_Previews: PreviewProvider {
+    static var faces = Faces()
+    static var item = Face(imageName: "1", place: CodableMKPointAnnotation())
+    static var images = [Image]()
+
+    static var previews: some View {
+        DetailView(faces: faces, item: item)
+    }
+}
