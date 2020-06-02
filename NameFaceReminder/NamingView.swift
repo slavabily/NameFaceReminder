@@ -31,7 +31,7 @@ struct NamingView: View {
         }
         .navigationBarTitle("Naming and Saving", displayMode: .inline)
         .navigationBarItems(trailing: Button("Save") {
-            self.record(image: self.pickedImage ?? UIImage(), fileName: self.photoName)
+//            self.record(image: self.pickedImage ?? UIImage(), fileName: self.photoName)
             
             if self.photoName != "" {
                 if let location = self.locationFetcher.lastKnownLocation {
@@ -41,6 +41,8 @@ struct NamingView: View {
                     print("Your location is \(location)")
 
                     let item = Face(imageName: self.photoName, place: self.face.place)
+                    
+                    self.record(image: self.pickedImage ?? UIImage(), fileName: item.imageName)
                     self.faces.items.append(item)
                     self.saveData()
                 } else {

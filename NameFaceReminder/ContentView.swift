@@ -27,13 +27,13 @@ struct ContentView: View {
                 List {
                     ForEach(faces.items.sorted()) { item in
                         NavigationLink(destination:
-                        DetailView(faces: self.faces,
+                            DetailView(faces: self.faces,
                                    item: item,
                                    images: self.images,
                                    centerCoordinate: self.$centerCoordinate,
                                    showingPlaceDetails: self.$showingPlaceDetails)) {
-                            if self.images.isEmpty == false {
-                                self.images[self.faces.items.firstIndex(of: item)!]
+                            if self.images.isEmpty == true {
+                                self.loadImage(item.imageName)
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 50, height: 50)
@@ -51,8 +51,6 @@ struct ContentView: View {
                     .sheet(isPresented: $showingImagePicker, onDismiss: nameTheImage) {
                         ImagePicker(image: self.$pickedImage)
                 }
-                .onAppear(perform: loadImages) 
-                  
             }
             .onAppear(perform: loadData)
         }
@@ -74,21 +72,22 @@ struct ContentView: View {
         }
     }
     
-    func loadImages() {
-        for item in faces.items {
-            let url = getDocumentsDirectory().appendingPathComponent(item.imageName)
-            do {
-                let jpegData = try Data(contentsOf: url)
-                if let uiImage = UIImage(data: jpegData) {
-                  let image = Image(uiImage: uiImage)
-                    images.append(image)
-                } else {
-                    print("No UIImages converted")
-                }
-            } catch {
-                print(error.localizedDescription)
+    func loadImage(_ name: String) -> Image {
+        
+        let url = getDocumentsDirectory().appendingPathComponent(name)
+        var i = Image(name)
+        do {
+            let jpegData = try Data(contentsOf: url)
+            if let uiImage = UIImage(data: jpegData) {
+                let image = Image(uiImage: uiImage)
+                i = image
+            } else {
+                print("No UIImages converted")
             }
+        } catch {
+            print(error.localizedDescription)
         }
+        return i
     }
     
     func nameTheImage() {

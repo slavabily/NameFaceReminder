@@ -19,9 +19,9 @@ struct DetailView: View {
 
     var body: some View {
         VStack {
-            if self.images.isEmpty == false {
+            if self.images.isEmpty == true {
                 GeometryReader { (geo) in
-                    self.images[self.faces.items.firstIndex(of: self.item)!]
+                    self.loadImage(self.item.imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                         .frame(width: geo.size.width)
@@ -30,6 +30,29 @@ struct DetailView: View {
             MapView(centerCoordinate: $centerCoordinate, selectedPlace: item.place, showingPlaceDetails: $showingPlaceDetails)
         }
         .navigationBarTitle("\(self.item.imageName)", displayMode: .inline)
+    }
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+    
+    func loadImage(_ name: String) -> Image {
+        
+        let url = getDocumentsDirectory().appendingPathComponent(name)
+        var i = Image(name)
+        do {
+            let jpegData = try Data(contentsOf: url)
+            if let uiImage = UIImage(data: jpegData) {
+                let image = Image(uiImage: uiImage)
+                i = image
+            } else {
+                print("No UIImages converted")
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+        return i
     }
 }
 
