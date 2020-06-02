@@ -31,8 +31,6 @@ struct NamingView: View {
         }
         .navigationBarTitle("Naming and Saving", displayMode: .inline)
         .navigationBarItems(trailing: Button("Save") {
-//            self.record(image: self.pickedImage ?? UIImage(), fileName: self.photoName)
-            
             if self.photoName != "" {
                 if let location = self.locationFetcher.lastKnownLocation {
                     let newLocation = CodableMKPointAnnotation()

@@ -10,10 +10,8 @@ import SwiftUI
 import MapKit
 
 struct MapView: UIViewRepresentable {
-    @Binding var centerCoordinate: CLLocationCoordinate2D
     var selectedPlace: CodableMKPointAnnotation?
-    @Binding var showingPlaceDetails: Bool
-    
+
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
         mapView.delegate = context.coordinator
@@ -36,10 +34,6 @@ struct MapView: UIViewRepresentable {
         
         init(_ parent: MapView) {
             self.parent = parent
-        }
-        
-        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-            parent.centerCoordinate = mapView.centerCoordinate
         }
         
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {

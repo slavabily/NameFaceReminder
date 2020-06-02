@@ -12,14 +12,10 @@ import MapKit
 struct ContentView: View {
     @State private var faces = Faces()
     @State private var face = Face(imageName: "", place: CodableMKPointAnnotation())
-    @State private var images = [Image]()
     @State private var pickedImage: UIImage?
     @State private var showingImagePicker = false
     @State private var showingNamingView = false
     
-    @State private var centerCoordinate = CLLocationCoordinate2D()
-    @State private var showingPlaceDetails = false
- 
     var body: some View {
          NavigationView {
             VStack {
@@ -28,17 +24,12 @@ struct ContentView: View {
                     ForEach(faces.items.sorted()) { item in
                         NavigationLink(destination:
                             DetailView(faces: self.faces,
-                                   item: item,
-                                   images: self.images,
-                                   centerCoordinate: self.$centerCoordinate,
-                                   showingPlaceDetails: self.$showingPlaceDetails)) {
-                            if self.images.isEmpty == true {
-                                self.loadImage(item.imageName)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 50, height: 50)
-                            }
-                                    Text("\(item.imageName)")
+                                       item: item)) {
+                                        self.loadImage(item.imageName)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 50, height: 50)
+                                        Text("\(item.imageName)")
                         }
                     }
                 }

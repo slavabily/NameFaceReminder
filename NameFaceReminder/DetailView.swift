@@ -12,22 +12,16 @@ import MapKit
 struct DetailView: View {
     var faces: Faces
     var item: Face
-    var images: [Image]
-    
-    @Binding var centerCoordinate: CLLocationCoordinate2D
-    @Binding var showingPlaceDetails: Bool
 
     var body: some View {
         VStack {
-            if self.images.isEmpty == true {
-                GeometryReader { (geo) in
-                    self.loadImage(self.item.imageName)
+            GeometryReader { (geo) in
+                self.loadImage(self.item.imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                        .frame(width: geo.size.width)
-                }
+                    .frame(width: geo.size.width)
             }
-            MapView(centerCoordinate: $centerCoordinate, selectedPlace: item.place, showingPlaceDetails: $showingPlaceDetails)
+            MapView(selectedPlace: item.place)
         }
         .navigationBarTitle("\(self.item.imageName)", displayMode: .inline)
     }
